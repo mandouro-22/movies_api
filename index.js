@@ -1,23 +1,20 @@
 import express from "express";
 import morgan from "morgan";
 import { initDB } from "./utils/db.js";
-import { Users } from "./models/index.js";
+import { auth } from "./routes/index.js";
 
 initDB();
 
 const app = express();
 app.use(morgan("dev"));
+app.use(express.json());
 app.get("/", (req, res) => {
   res.json({ message: "Welcome To Movies App" });
 });
 
-app.get("/users", async (req, res) => {
-  const user = await Users.findAll();
-  res.json(user);
-});
+app.use("/api/auth", auth);
 
 // create layer handl error
-
 app.use((req, res) => {
   res.status(404).json({ message: "Page Not Found" });
 });
