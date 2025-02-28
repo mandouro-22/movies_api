@@ -1,9 +1,12 @@
 import express from "express";
 import morgan from "morgan";
 import { initDB } from "./utils/db.js";
-import { auth } from "./routes/index.js";
+import { auth, moveis, review, watchlists } from "./routes/index.js";
+import { CreateAdminDefault } from "./utils/admin.js";
 
-initDB();
+initDB().then(() => {
+  CreateAdminDefault();
+});
 
 const app = express();
 app.use(morgan("dev"));
@@ -13,6 +16,9 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", auth);
+app.use("/api/movies", moveis);
+app.use("/api/reviews", review);
+app.use("/api/watchList", watchlists);
 
 // create layer handl error
 app.use((req, res) => {
