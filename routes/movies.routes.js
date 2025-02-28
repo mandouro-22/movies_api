@@ -3,6 +3,8 @@ import * as moviesControllers from "../controller/movies.controller.js";
 import { asyncHandler } from "../utils/helpers.js";
 import { authenticateAdmin } from "../middlewares/admin.middleware.js";
 import { authentication } from "../middlewares/auth.middleware.js";
+import { validationRequest } from "../middlewares/validator.middleware.js";
+import { createMovieValidator } from "../validators/auth.validator.js";
 
 const moveis = express.Router();
 // get all movies
@@ -14,6 +16,8 @@ moveis.get("/:id", asyncHandler(moviesControllers.getMovieById));
 // set movie
 moveis.post(
   "/",
+  createMovieValidator(),
+  validationRequest,
   authentication,
   asyncHandler(authenticateAdmin),
   asyncHandler(moviesControllers.createMovie)
